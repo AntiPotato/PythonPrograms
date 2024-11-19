@@ -1,7 +1,7 @@
 import math
 import sys
 
-# Take prince input from customer.
+# Take price input from customer.
 charge_for_food = float(input("Enter the charge for the food.\n"))
 if(charge_for_food <= 0):
     print("Please enter a valid charge.")
