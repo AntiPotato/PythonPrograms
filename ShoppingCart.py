@@ -74,20 +74,20 @@ class ShoppingCart:
     # Prints the cart total.       
     def print_total(self):
         if len(self.cart_items) == 0:
-            print("SHOPPING CART IS EMPTY")
+            print('{: ^100}'.format("SHOPPING CART IS EMPTY"))
             return
         
         print('{: ^100}'.format(f"{self.customer_name}'s Shopping Cart - {self.current_date}"))
         print('{: ^100}'.format(f"Number of Items: {self.get_num_items_in_cart()}"))
         for item in self.cart_items:
             item.print_item_cost()
-        print('{: ^100}'.format(f"Total: ${self.get_cost_of_cart()}"))
+        print('{: ^100}'.format(f"Total: ${self.get_cost_of_cart():.0f}"))
         print()
 
     # Prints item descriptions.
     def print_description(self):
         if len(self.cart_items) == 0:
-            print("SHOPPING CART IS EMPTY")
+            print('{: ^100}'.format("SHOPPING CART IS EMPTY"))
             return
         
         print('{: ^100}'.format(f"{self.customer_name}'s Shopping Cart - {self.current_date}"))
@@ -106,30 +106,80 @@ def print_menu(shopping_cart):
     print('{: ^100}'.format("i - Output items' descriptions"))
     print('{: ^100}'.format("o - Output shopping cart"))
     print('{: ^100}'.format("q - Quit"))
-    choice = input('{: ^100}'.format("Choose an option:\n"))
+
+    print('{: ^100}'.format("Choose an option:"))
+    choice = input('{: <50}'.format(""))
     print()
+          
     if choice == 'q':
         return
+    
     elif choice == 'a':
-        item = ItemToPurchase(input("\nEnter the item name:\n"), float(input("\nEnter the item price:\n")), int(input("\nEnter the item quantity:\n")), input("\nEnter the item desciption:\n"))
+        print('{: ^100}'.format("ADD ITEM TO CART"))
+        
+        print('{: ^100}'.format("Enter the item name:"))
+        item_name = input('{: <50}'.format(""))
+        
+        print('{: ^100}'.format("Enter the item description"))
+        item_description = input('{: <50}'.format(""))
+        
+        print('{: ^100}'.format("Enter the item price:"))
+        item_price = float(input('{: <50}'.format("")))
+        
+        print('{: ^100}'.format("Enter the item quantity"))
+        item_quantity = int(input('{: <50}'.format("")))
+        
+        item = ItemToPurchase(item_name, item_price, item_quantity, item_description)
+        
         shopping_cart.add_item(item)
+        
     elif choice == 'r':
-        item_name = input("\nEnter item name to remove:\n")
+        print('{: ^100}'.format("REMOVE ITEM FROM CART"))
+        
+        print('{: ^100}'.format("Enter name of item to remove:"))
+        item_name = input('{: <50}'.format(""))
+        
         shopping_cart.remove_item(item_name)
+        
     elif choice == 'c':
-        item_name = input("\nEnter item name whose quantity you want to modify:\n")
-        quantity = int(input(f"\nEnter the new quantity for the item:\n"))
-        modified_item = ItemToPurchase(item_name = item_name, item_quantity = quantity)
+        print('{: ^100}'.format("CHANGE ITEM QUANTITY"))
+        
+        print('{: ^100}'.format("Enter the item name:"))
+        item_name = input('{: <50}'.format(""))
+
+        print('{: ^100}'.format("Enter the new quantity:"))
+        item_quantity = int(input('{: <50}'.format("")))
+        
+        modified_item = ItemToPurchase(item_name = item_name, item_quantity = item_quantity)
         shopping_cart.modify_item(modified_item)
+        
     elif choice == 'i':
+        print('{: ^100}'.format("OUTPUT ITEMS' DESCRIPTIONS"))
+        
         shopping_cart.print_description()
+        
     elif choice == 'o':
+        print('{: ^100}'.format("OUTPUT SHOPPING CART"))
+        
         shopping_cart.print_total()
+
+    # Calling itself to show the menu again.    
     print_menu(shopping_cart)
 
 
 if __name__ == "__main__":
-    shopping_cart = ShoppingCart(input("\nEnter the customer name:\n"), input("\nEnter the current date:\n"), [])
+
+    print('{: ^100}'.format("Enter customer's name:"))
+    customer_name = input('{: <50}'.format(""))
+    print('{: ^100}'.format("Enter today's date:"))
+    today_date = input('{: <50}'.format(""))
+
+    print()
+    print('{: ^100}'.format(f'Customer name: {customer_name}'))
+    print('{: ^100}'.format(f'Today\'s date: {today_date}'))
+    
+    shopping_cart = ShoppingCart(customer_name, today_date)
+    
     print_menu(shopping_cart)
         
             
