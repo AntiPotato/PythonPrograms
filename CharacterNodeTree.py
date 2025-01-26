@@ -3,12 +3,14 @@ from CharacterNode import CharacterNode
 from queue import PriorityQueue
 
 class CharacterNodeTree:
+    # Parameterized constructor to help build a character node tree. Internally calls for building the tree.
     def __init__(self, character_node_list):
         self.character_node_list = character_node_list
         self.tree_root = None
         self.code_table = {}
         self.__build_character_node_tree__()
 
+    # Builds the tree and call internal extract method to help store the coded values for the characters.
     def __build_character_node_tree__(self):
         nodes_min_heap = PriorityQueue()
         for node in self.character_node_list.copy():
@@ -33,6 +35,7 @@ class CharacterNodeTree:
         self.__extract_code_table__(tree_root = self.tree_root, path = f'')
 
 
+    # Extracts the coded values from the given tree.
     def __extract_code_table__(self, tree_root, path):
         if tree_root.left == None and tree_root.right == None:
             self.code_table[tree_root.character] = path
@@ -42,7 +45,8 @@ class CharacterNodeTree:
         if tree_root.right != None:
             self.__extract_code_table__(tree_root = tree_root.right, path = f'{path}1')
             
-                
+
+    # Prints the tree that was build for the algorithm.          
     def print_character_node_tree(self):
         character_queue = Queue(maxsize=pow(2,len(self.character_node_list)+1))
         character_queue.put(self.tree_root)
@@ -51,6 +55,7 @@ class CharacterNodeTree:
         level = 1
         all_none = True
 
+        # Level order printing by using the queue.
         while(not character_queue.empty()):
             element = character_queue.get()
             if element == None:
@@ -64,9 +69,12 @@ class CharacterNodeTree:
             print(element, end = ' ')
             
             count = count + 1
+            # Checks if the printed nodes match the full tree size and increments the level if so.
             if pow(2, level) - 1 == count:
                 print()
                 level = level + 1
+
+                # Checks if there are no nodes that were printed in this level except null nodes.
                 if all_none:
                     print()
                     return
