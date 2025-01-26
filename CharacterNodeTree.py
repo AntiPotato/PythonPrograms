@@ -1,5 +1,6 @@
 from queue import Queue
 from CharacterNode import CharacterNode
+from queue import PriorityQueue
 
 class CharacterNodeTree:
     def __init__(self, character_node_list):
@@ -9,38 +10,25 @@ class CharacterNodeTree:
         self.__build_character_node_tree__()
 
     def __build_character_node_tree__(self):
-        copied_list = self.character_node_list.copy()
-        
+        nodes_min_heap = PriorityQueue()
+        for node in self.character_node_list.copy():
+            nodes_min_heap.put(node)
+
         for i in range(len(self.character_node_list)-1):
-            
-            min_frequency_node = None
-            for node in copied_list:
-                if node.parent == None:
-                   min_frequency_node = node
 
-
-            second_min_frequency_node = None
-            for node in copied_list:
-                if min_frequency_node != None and node.parent == None and node.character != min_frequency_node.character:
-                   second_min_frequency_node = node 
-
-            
             # Find the two min frequency nodes so that we can connect them with a common parent.
-            for node in copied_list:
-                if second_min_frequency_node != None and node.parent == None and node.frequency <= min_frequency_node.frequency and node.character != min_frequency_node.character:
-                    second_min_frequency_node = min_frequency_node
-                    min_frequency_node = node
-                elif second_min_frequency_node != None and node.parent == None and node.frequency <= second_min_frequency_node.frequency and node.character != min_frequency_node.character:
-                    second_min_frequency_node = node
+            min_frequency_node = nodes_min_heap.get()
+            second_min_frequency_node = nodes_min_heap.get()
 
+            # Create a new node with combined frequencies.
+            parent_node = CharacterNode(character = f'{second_min_frequency_node.character}{min_frequency_node.character}', frequency =  min_frequency_node.frequency + second_min_frequency_node.frequency)
+            parent_node.set_left(second_min_frequency_node)
+            parent_node.set_right(min_frequency_node)
 
-            if second_min_frequency_node != None:
-                parent_node = CharacterNode(character = f'{second_min_frequency_node.character}{min_frequency_node.character}', frequency =  min_frequency_node.frequency + second_min_frequency_node.frequency)
-                parent_node.set_left(second_min_frequency_node)
-                parent_node.set_right(min_frequency_node)
-                
-                copied_list.append(parent_node)
-                self.tree_root = parent_node
+            # Add it to the heap to be able to run the next round of matching.
+            nodes_min_heap.put(parent_node)
+            
+            self.tree_root = parent_node
 
         self.__extract_code_table__(tree_root = self.tree_root, path = f'')
 

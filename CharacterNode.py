@@ -23,6 +23,9 @@ class CharacterNode:
     def get_character(self):
         return self.character
 
+    def __lt__(self, other):
+        return self.frequency < other.frequency
+
     def __str__(self):
         if self == None:
             return '[None]'
